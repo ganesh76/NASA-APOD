@@ -1,5 +1,9 @@
 # NASA-APOD
 
+# Description
+Each day a different image or photograph of our fascinating universe is featured.
+Data is fetched from API and saved in DB for offline viewing, data is updated on new date change every day.
+
 # Notes  
 * Used MVVM architecture with kotlin.
 * Used Retrofit library to fetch the apod image and stored in Room DB for offline access.
