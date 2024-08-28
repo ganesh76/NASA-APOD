@@ -5,17 +5,33 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.3"
+    compileSdkVersion 34
+
+    /**
+     * compileSdk specifies the Android API level Gradle should use to
+     * compile your app. This means your app can use the API features included in
+     * this API level and lower.
+     */
+
+    compileSdk = 34
+
 
     defaultConfig {
-        applicationId "com.ganeshgundu.nasaapod"
-        minSdkVersion 16
-        targetSdkVersion 30
-        versionCode 1
-        versionName "1.0"
+        applicationId
+        "com.ganeshgundu.nasaapod"
+        // Defines the minimum API level required to run the app.
+        minSdk = 21
+        // Specifies the API level used to test the app.
+        targetSdk = 34
+        versionCode 2
+        versionName "2.0"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        tasks.whenTaskAdded {
+            task ->
+                println(task)
+        }
     }
 
     buildTypes {
@@ -33,20 +49,23 @@ android {
             }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '17'
+    }
+    packagingOptions {
+        resources {
+            excludes += ['META-INF/atomicfu.kotlin_module']
+        }
     }
 
-    packagingOptions {
-        exclude 'META-INF/atomicfu.kotlin_module'
-    }
 
     buildFeatures {
         viewBinding true
     }
+    namespace 'com.ganeshgundu.nasaapod'
 }
 
 dependencies {
@@ -74,10 +93,14 @@ dependencies {
     // Retrofit with Moshi Converter
     implementation "com.squareup.retrofit2:converter-moshi:$retrofitMoshi"
 
-    // lifecycle
+    // lifecycle deps
+
+    // ViewModel
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$viewModel")
+    // Annotation processor
     kapt "androidx.lifecycle:lifecycle-compiler:$viewModel"
-    implementation "androidx.lifecycle:lifecycle-extensions:$viewModel"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$viewModel"
+    // Saved state module for ViewModel
+    implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:$viewModel")
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$viewModel"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$viewModel"
 
