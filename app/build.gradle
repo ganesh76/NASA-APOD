@@ -6,6 +6,13 @@ plugins {
     id 'com.google.firebase.crashlytics'    // Or the latest version
     }
 
+// Read from local.properties
+def localProperties = new Properties()
+localProperties.load(new FileInputStream(rootProject.file("local.properties")))
+
+def BASE_URL = localProperties.getProperty("BASE_URL", "")
+def API_KEY = localProperties.getProperty("API_KEY", "")
+
 android {
     compileSdkVersion 35
 
@@ -40,15 +47,15 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField "String", "BASE_URL", "\"https://api.nasa.gov\""
-            buildConfigField "String", "API_KEY", "\"rUvwDrHvLwRHB7f9xBXb5AVXpiP4ood1labInIbo\""
+            buildConfigField("String", "BASE_URL", "\"${BASE_URL}\"")
+            buildConfigField("String", "API_KEY", "\"${API_KEY}\"")
         }
 
         debug {
             debuggable true
-            buildConfigField "String", "BASE_URL", "\"https://api.nasa.gov\""
-            buildConfigField "String", "API_KEY", "\"rUvwDrHvLwRHB7f9xBXb5AVXpiP4ood1labInIbo\""
-            }
+            buildConfigField("String", "BASE_URL", "\"${BASE_URL}\"")
+            buildConfigField("String", "API_KEY", "\"${API_KEY}\"")
+        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
