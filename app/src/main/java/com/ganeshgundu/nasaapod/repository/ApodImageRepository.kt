@@ -16,7 +16,7 @@ class ApodImageRepository(val apodImageDao: ApodImageDao, val context: Context) 
         API_ERROR,
         OFFLINE_DATA_NA,
         LAST_AVAILABLE_DATA,
-        NONE
+        SUCCESS
     }
 
     suspend fun getApodImage(): ApodImageRepositoryModel {
@@ -44,7 +44,7 @@ class ApodImageRepository(val apodImageDao: ApodImageDao, val context: Context) 
                 apodImageDao.deleteAll()
                 apodImageDao.insertApodImage(apodImageData)
                 PrefsHelper.setUpdatedDate(context, PrefsHelper.getCurrentFormattedDate())
-                return ApodImageRepositoryModel(ResponseStatus.NONE, apodImageData)
+                return ApodImageRepositoryModel(ResponseStatus.SUCCESS, apodImageData)
             } else {
                 return ApodImageRepositoryModel(ResponseStatus.API_ERROR, ApodImageData())
             }
@@ -62,7 +62,7 @@ class ApodImageRepository(val apodImageDao: ApodImageDao, val context: Context) 
             if (PrefsHelper.getUpdatedDate(context)
                     .contentEquals(PrefsHelper.getCurrentFormattedDate())
             ) {
-                return ApodImageRepositoryModel(ResponseStatus.NONE, apodImageData.get(0))
+                return ApodImageRepositoryModel(ResponseStatus.SUCCESS, apodImageData.get(0))
             } else {
                 return ApodImageRepositoryModel(
                     ResponseStatus.LAST_AVAILABLE_DATA,

@@ -3,10 +3,13 @@ package com.ganeshgundu.nasaapod.view
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import android.widget.ScrollView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
@@ -16,6 +19,8 @@ import com.ganeshgundu.nasaapod.databinding.ActivityApodimageBinding
 import com.ganeshgundu.nasaapod.db.ApodImageData
 import com.ganeshgundu.nasaapod.repository.ApodImageRepository
 import com.ganeshgundu.nasaapod.viewmodel.ApodImageViewModel
+import androidx.activity.enableEdgeToEdge
+import androidx.core.view.updatePaddingRelative
 
 
 class ApodImageActivity : AppCompatActivity() {
@@ -27,7 +32,17 @@ class ApodImageActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityApodimageBinding.inflate(layoutInflater)
+        // For Android 14 and lower; on 15+ it's enforced but this keeps behavior consistent.
+        enableEdgeToEdge()
         setContentView(binding.root)
+        val rootScroll = findViewById<ScrollView>(R.id.rootScroll)
+
+        // Pad your content so it stays out from under status/nav bars.
+        ViewCompat.setOnApplyWindowInsetsListener(rootScroll) { v, insets ->
+            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.updatePaddingRelative(top = bars.top, bottom = bars.bottom)
+            insets
+        }
         context = this
         viewModel.getApodData()
         viewModel.responseData.observe(this, {
@@ -36,7 +51,7 @@ class ApodImageActivity : AppCompatActivity() {
                     showAlert(context.getString(R.string.last_available_data_error))
                     populateUi(it.response)
                 }
-                ApodImageRepository.ResponseStatus.NONE -> populateUi(it.response)
+                ApodImageRepository.ResponseStatus.SUCCESS -> populateUi(it.response)
                 ApodImageRepository.ResponseStatus.OFFLINE_DATA_NA -> {
                     binding.apodTitleTextView.text =
                         context.getString(R.string.no_available_data_error_title)

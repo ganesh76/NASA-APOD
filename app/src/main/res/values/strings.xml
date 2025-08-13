@@ -6,4 +6,5 @@
     <string name="api_error_title">Api Response error</string>
     <string name="api_error_msg">We are facing issues serving you, please try later</string>
     <string name="alert_ok">OK</string>
+    <string name="cd_apod_image">Astronomy Picture of the Day</string>
 </resources>

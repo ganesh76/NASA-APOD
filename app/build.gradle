@@ -2,10 +2,12 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
-}
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'    // Or the latest version
+    }
 
 android {
-    compileSdkVersion 34
+    compileSdkVersion 35
 
     /**
      * compileSdk specifies the Android API level Gradle should use to
@@ -13,18 +15,18 @@ android {
      * this API level and lower.
      */
 
-    compileSdk = 34
+    compileSdk = 35
 
 
     defaultConfig {
         applicationId
         "com.ganeshgundu.nasaapod"
         // Defines the minimum API level required to run the app.
-        minSdk = 21
+        minSdk = 24
         // Specifies the API level used to test the app.
-        targetSdk = 34
-        versionCode 2
-        versionName "2.0"
+        targetSdk = 35
+        versionCode 30000
+        versionName "3.0.0"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -71,13 +73,16 @@ android {
 dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.3.2'
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.google.android.material:material:1.3.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'androidx.core:core-ktx:1.16.0'
+    implementation 'androidx.appcompat:appcompat:1.7.1'
+    implementation 'com.google.android.material:material:1.12.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    //activity
+    implementation "androidx.activity:activity-ktx:1.10.1" // or newer
 
     //fragment
     implementation "androidx.fragment:fragment-ktx:$fragment"
@@ -107,5 +112,17 @@ dependencies {
     //glide network image loading lib
     implementation "com.github.bumptech.glide:glide:$glide"
     annotationProcessor "com.github.bumptech.glide:compiler:$glide"
+
+    //firebase
+    // Import the Firebase BoM
+    implementation(platform("com.google.firebase:firebase-bom:34.1.0"))
+
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+
+    // Add the dependency for the Firebase SDK for Google Analytics
+    implementation("com.google.firebase:firebase-analytics")
+
+    // Add the dependency for the Firebase Crashlytics SDK
+    implementation("com.google.firebase:firebase-crashlytics") // Add this line
 
 }
