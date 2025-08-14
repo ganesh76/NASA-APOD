@@ -13,6 +13,12 @@ localProperties.load(new FileInputStream(rootProject.file("local.properties")))
 def BASE_URL = localProperties.getProperty("BASE_URL", "")
 def API_KEY = localProperties.getProperty("API_KEY", "")
 
+def keystoreProperties = new Properties()
+def keystoreFile = rootProject.file("local.properties")
+if (keystoreFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystoreFile))
+}
+
 android {
     compileSdkVersion 35
 
@@ -32,8 +38,8 @@ android {
         minSdk = 24
         // Specifies the API level used to test the app.
         targetSdk = 35
-        versionCode 30000
-        versionName "3.0.0"
+        versionCode 30102
+        versionName "3.1.2"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -43,12 +49,27 @@ android {
         }
     }
 
+    signingConfigs {
+        release {
+            storeFile file(keystoreProperties["RELEASE_STORE_FILE"] ?: "")
+            storePassword keystoreProperties["RELEASE_STORE_PASSWORD"] ?: ""
+            keyAlias keystoreProperties["RELEASE_KEY_ALIAS"] ?: ""
+            keyPassword keystoreProperties["RELEASE_KEY_PASSWORD"] ?: ""
+        }
+    }
+
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField("String", "BASE_URL", "\"${BASE_URL}\"")
             buildConfigField("String", "API_KEY", "\"${API_KEY}\"")
+            minifyEnabled = true
+            shrinkResources = true
+            zipAlignEnabled = true
+            signingConfig = signingConfigs.release
+            proguardFiles(
+                    getDefaultProguardFile("proguard-android-optimize.txt"),
+                    "proguard-rules.pro"
+            )
         }
 
         debug {
@@ -57,6 +78,11 @@ android {
             buildConfigField("String", "API_KEY", "\"${API_KEY}\"")
         }
     }
+
+    lint {
+        disable 'NotificationPermission'
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17

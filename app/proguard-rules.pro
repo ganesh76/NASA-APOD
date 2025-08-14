@@ -19,3 +19,15 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+-keep class com.ganeshgundu.nasaapod.** { *; }
+-keepattributes *Annotation*
+-keep class * implements android.os.Parcelable { public static final android.os.Parcelable$Creator *; }
+-keep class * extends android.view.View {
+public <init>(android.content.Context);
+public <init>(android.content.Context,android.util.AttributeSet);
+public <init>(android.content.Context,android.util.AttributeSet,int); }
+-assumenosideeffects class android.util.Log {
+public static *** d(...);
+public static *** v(...); public static *** i(...);
+public static *** w(...); public static *** e(...); }
+-keep class com.ganeshgundu.nasaapod.BuildConfig { *; }
